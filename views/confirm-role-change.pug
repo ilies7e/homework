@@ -1,0 +1,22 @@
+// views/confirm-role-change.pug
+doctype html
+html
+  head
+    title Confirm Role Change
+    link(rel="stylesheet", href="/styles/style.css")
+  body
+    .container
+      h1 Are you sure?
+      p You are about to #{action} user #{username}
+      form(method="POST", action="/admin-roles")
+        input(type="hidden", name="username", value=username)
+        input(type="hidden", name="action", value=action)
+        input(type="hidden", name="confirmed", value="true")
+        button(type="submit") Yes
+      a.button(href="/admin") No, take me back
+      nav
+        a(href="/") Home
+        |  | 
+        a(href="/admin") Admin panel
+        |  | 
+        a(href="/my-account") My account

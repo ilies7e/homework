@@ -1,0 +1,18 @@
+doctype html
+html
+  head
+    title Login
+    link(rel="stylesheet", href="/styles/style.css")
+  body
+    .container
+      h1 Login
+      form(method="POST")
+        label(for="username") Username
+        input(type="text", name="username", required)
+        label(for="password") Password
+        input(type="password", name="password", required)
+        button(type="submit") Log in
+      nav
+        a(href="/") Home
+        |  | 
+        a(href="/my-account") My account

@@ -1,0 +1,22 @@
+doctype html
+html
+  head
+    title My Account
+    link(rel="stylesheet", href="/styles/style.css")
+  body
+    .container
+      h1 My Account
+      p Your username is: #{user.username}
+      form(method="POST", action="/update-email")
+        label(for="email") Email
+        input(type="email", name="email", value=user.email)
+        button(type="submit") Update email
+      nav
+        a(href="/") Home
+        if user.role === 'ADMIN'
+          |  | 
+          a(href="/admin") Admin panel
+        |  | 
+        a(href="/my-account") My account
+        |  | 
+        a(href="/logout") Log out

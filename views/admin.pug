@@ -1,0 +1,26 @@
+doctype html
+html
+  head
+    title Admin Panel
+    link(rel="stylesheet", href="/styles/style.css")
+  body
+    .container
+      h1 User
+      each user in users
+        p #{user.username} (#{user.role})
+        if user.role === 'NORMAL'
+          form(method="POST", action="/admin-roles")
+            input(type="hidden", name="username", value=user.username)
+            input(type="hidden", name="action", value="upgrade")
+            button(type="submit") Upgrade user
+        else
+          form(method="POST", action="/admin-roles")
+            input(type="hidden", name="username", value=user.username)
+            input(type="hidden", name="action", value="downgrade")
+            button(type="submit") Downgrade user
+      nav
+        a(href="/") Home
+        |  | 
+        a(href="/admin") Admin panel
+        |  | 
+        a(href="/my-account") My account
