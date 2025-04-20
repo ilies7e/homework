@@ -1,4 +1,3 @@
-// app.js
 require('dotenv').config();
 const express = require('express');
 const cookieParser = require('cookie-parser');
@@ -7,11 +6,11 @@ const path = require('path');
 
 const app = express();
 
-// Configuration
+
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
-// Middleware
+
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -26,13 +25,13 @@ app.use(session({
     }
 }));
 
-// Security headers
+
 app.use((req, res, next) => {
     res.setHeader('X-Frame-Options', 'SAMEORIGIN');
     next();
 });
 
-// Users database
+
 const users = {
     'administrator': {
         password: 'admin',
@@ -51,7 +50,7 @@ const users = {
     }
 };
 
-// Authentication middleware
+
 const requireAuth = (req, res, next) => {
     if (!req.session.user) {
         return res.redirect('/login');
@@ -59,7 +58,7 @@ const requireAuth = (req, res, next) => {
     next();
 };
 
-// Admin middleware
+
 const requireAdmin = (req, res, next) => {
     if (req.session.user?.role !== 'ADMIN') {
         return res.status(401).json("Unauthorized");
@@ -67,7 +66,7 @@ const requireAdmin = (req, res, next) => {
     next();
 };
 
-// Routes
+
 app.get('/', (req, res) => {
     res.render('home');
 });
@@ -105,9 +104,9 @@ app.get('/admin', requireAuth, requireAdmin, (req, res) => {
     });
 });
 
-// Admin roles endpoints (vulnerable)
+
 app.post('/admin-roles', requireAuth, (req, res) => {
-    // Step 1: Initiate role change (upgrade or downgrade)
+    
     if ((req.body.action === 'upgrade' || req.body.action === 'downgrade') && 
         req.body.username && !req.body.confirmed) {
         
@@ -126,7 +125,7 @@ app.post('/admin-roles', requireAuth, (req, res) => {
         });
     }
     
-    // Step 2: Confirm role change (VULNERABLE - missing proper access control)
+    
     if ((req.body.action === 'upgrade' || req.body.action === 'downgrade') && 
         req.body.confirmed === 'true' && req.body.username) {
         
@@ -136,7 +135,7 @@ app.post('/admin-roles', requireAuth, (req, res) => {
             return res.status(400).send('Bad Request');
         }
         
-        // Perform the role change
+       
         if (req.body.action === 'upgrade') {
             users[username].role = 'ADMIN';
         } else if (req.body.action === 'downgrade') {
@@ -145,7 +144,7 @@ app.post('/admin-roles', requireAuth, (req, res) => {
             return res.status(400).send('Bad Request');
         }
         
-        // Update session if changing own role
+        
         if (username === req.session.user?.username) {
             req.session.user.role = users[username].role;
         }
